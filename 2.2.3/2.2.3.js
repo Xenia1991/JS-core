@@ -1,34 +1,30 @@
 function deepEqual (obj1, obj2) {
-
     if (obj1 === null && obj2 === null) {
-        return true;
-    }  
+        return true
+    }
+    if (obj1 === null && obj2 !== null || obj1 !== null && obj2 === null) {
+        return false
+    }
+    if (typeof obj1 !== 'object' && typeof obj2 !== 'object') {
+        return obj1 === obj2
+    }
 
-    if (obj1 === null && obj2 !== null || 
-        obj2 === null && obj1 !== null
-    ) {
+    let firstObjKeys = Object.keys(obj1);
+    let secondObjKeys = Object.keys(obj2);
+    if (firstObjKeys.length !== secondObjKeys.length) {
         return false;
     }
 
-    if (typeof (obj1) !== 'object' && typeof (obj2) !== 'object') {
-        return obj1 === obj2;
-    }
-
-    if (typeof (obj1) === 'object' && typeof (obj2) === 'object') {
-        let firstObjKeys = Object.keys(obj1);
-        let secondObjKeys = Object.keys(obj2);
-        if (firstObjKeys.length !== secondObjKeys.length) {
+    for (let key in obj1) {
+        const values1 = obj1[key];
+        const values2 = obj2[key];
+        const areObjects = values1 != null && typeof values1 === 'object' && values2 != null && typeof values2 === 'object';
+        if (areObjects && !deepEqual(values1, values2) || !areObjects && values1 !== values2) {
             return false;
         }
-        for (let key in obj1) {
-            if (typeof (obj1[key]) === 'object' && typeof (obj2[key]) === 'object' &&
-                obj1[key] !== null && obj2[key] !== null) {
-                deepEqual(obj1[key], obj2[key]);
-                return true;
-            }
-        }
     }
-    return obj1 === obj2;
+
+    return true;
 }
 
 const a = {"name":"Misha","order":{"price":20}};
@@ -36,6 +32,9 @@ const b = {"order":{"price":20},"name":"Misha"};
 
 const c = {"name":"Misha","order":{"price":20}};
 const d = {"name":"Misha","order":{"price":20},"extraField":null};
+
+const e = {"name":"Misha","order":{"price":20}};
+const f = {"name":"Misha","order":{"price":1000}};
 
 const firstObject = {
     a: {
@@ -62,15 +61,16 @@ const secondObject = {
 };
 
 console.log(deepEqual(a,b)); //true
-console.log(deepEqual(c,d)); //false
 console.log(deepEqual(firstObject, secondObject)); // true
 console.log(deepEqual({a: {b: {c: 1}}}, {a: {b: {c: 1}}})); // true
+console.log(deepEqual(c,d)); //false
 console.log(deepEqual({ a:1, b: 3 }, { b: 2, a: 1})); // false
+console.log(deepEqual(e,f)); //false
+console.log(deepEqual(null, null)); // true
+console.log(deepEqual(2, 2)); // true
 console.log(deepEqual(1, 2)); // false
 console.log(deepEqual(true, false)); // false
-console.log(deepEqual(null, null)); // true
 console.log(deepEqual(null, 2)); // false
-console.log(deepEqual(2, 2)); // true
 
 
 // Напишите функцию, которая проверяет на равенство два объекта, учитывая их вложенность.

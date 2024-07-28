@@ -12,12 +12,6 @@ class Calc {
         return this.counter;
     }
 }
-// var createFunc = function(param){
-// 	var closureParam = param;
-// 	// замыкание
-// 	var returnedFunc = function(){alert(closureParam);}
-// 	return returnedFunc;
-// }
 
 const calc = new Calc();
 console.log(calc);

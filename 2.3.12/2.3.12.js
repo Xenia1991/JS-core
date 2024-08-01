@@ -37,6 +37,7 @@ class BroadcastEventEmitter extends EventEmitter {
     emit(event = '*', arg) {
         if (event = '*') {
            const events = Object.keys(this.event);
+           console.log(events);
            events.forEach((event) => {
                 this.event[event].forEach(((func) => console.log(func(arg))))
            })

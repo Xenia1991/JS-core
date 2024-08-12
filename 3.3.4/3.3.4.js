@@ -1,48 +1,21 @@
-// ПОКА ОТЛОЖЕНА!!! ВЕРНУСЬ ПОСЛЕ ВСЕХ ОСТАВШИХСЯ 
-
-const users = [
-    {id:1, name: 'Alex', age: 70},
-    {id:2, name: 'Jane', age: 48},
-    {id:3, name: 'Den', age: 20},
-    {id:4, name: 'Max', age: 35},
-    {id:5, name: 'Anna', age: 25},
-    {id:6, name: 'Betta', age: 48},
-    {id:7, name: 'Robert', age: 32},
-]
-
-class UsersLIbrary {
-    constructor (usersObj) {
-        this.users = usersObj ;
-    }
-
-    getUsersIds (callback) {
-        const ids = [2,6,8,3];
-        
-        setTimeout(() => {
-            callback(ids);
-        }, 200) 
-    }
-
-    getUserInfo (id, callback) {   
-        const user = users.map((user) => {
-            if (user.id === id) {
-                return {};
-            }
-        });
-
-        setTimeout(() => {
-            callback(user)
-        }, Math.random()*200)
-    }
-}
-
-const db = new UsersLIbrary(users);
-
 const { getUserInfo, getUsersIds } = db;
 
 function getUsersInfo(onLoad) {
-
-};
+    getUsersIds((ids) => {
+        if (ids.length === 0) {
+            return onLoad([])
+        }
+        let usersInfo = new Array(ids.length)
+        ids.forEach((id, index) => {
+            getUserInfo(id, info => {
+                usersInfo[index] = info
+                if (index === ids.length - 1) {
+                    return onLoad(usersInfo)
+                }
+            })
+        })
+    })
+}
 
 
 getUsersIds((ids) => {
